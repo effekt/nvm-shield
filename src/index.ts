@@ -52,15 +52,29 @@ function isValidVersion(nvmrc: string, compare?: string | undefined) {
 
   if (currentNodeVersion === nvmrc) return;
 
+  const [nvmMajor, nvmMinor, nvmPatch] = nvmrc.replace('v', '').split('.');
+  const [nodeMajor, nodeMinor] = currentNodeVersion.replace('v', '').split('.');
+
+  console.log({ nvmMajor, nvmMinor, nvmPatch });
+
+  if (compare === 'patch' && !nvmPatch)
+    throw new Error(
+      `Requested patch version comparison but did not provide the patch version. Provided: (${nvmMajor}.${nvmMinor}.${nvmPatch}), Expected: (x.x.x)`,
+    );
+
+  if (compare === 'minor' && !nvmMinor)
+    throw new Error(
+      `Requested minor version comparison but did not provide the minor version. Provided: (${nvmMajor}.${nvmMinor}), Expected: (x.x)`,
+    );
+
   if (!compare || compare === 'patch') {
     if (currentNodeVersion !== nvmrc)
       throw new Error(
         `Current Node version: ${currentNodeVersion}. Required Node version: ${nvmrc}.`,
       );
-  }
 
-  const [nvmMajor, nvmMinor] = nvmrc.replace('v', '').split('.');
-  const [nodeMajor, nodeMinor] = currentNodeVersion.replace('v', '').split('.');
+    return;
+  }
 
   if (compare === 'major' && nvmMajor !== nodeMajor) {
     throw new Error(
@@ -97,5 +111,5 @@ function transformVersion(version: string | undefined) {
   ) {
     throw new Error(`Invalid --version value supplied (${version})`);
   }
-  return [major, minor || 'x', patch || 'x'].join('.');
+  return [major, minor || undefined, patch || undefined].join('.');
 }
