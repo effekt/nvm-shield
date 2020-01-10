@@ -1,0 +1,31 @@
+{
+  "name": "nvm-shield",
+  "version": "0.1.0",
+  "description": "Shield your application from incorrect Node.js versions by verifying against a .nvmrc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "nvm-shield": "dist/index.js"
+  },
+  "keywords": [
+    "nvm",
+    "use",
+    "nvmrc",
+    "shield",
+    "guard",
+    "react",
+    "nvmrc"
+  ],
+  "author": "Jesse Wheeler",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^13.1.5",
+    "@typescript-eslint/parser": "^2.15.0",
+    "eslint": "^6.8.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
+  }
+}
