@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { parseArguments } from './utils/arguments';
+import { comparePackageLockChecksum, getPackageLockChecksum } from './utils/ci';
 import { getNvmrc } from './utils/nvmrc';
 
 const currentNodeVersion = process.version;
@@ -21,25 +22,46 @@ try {
       parsedArguments['--compare']?.trim().toLowerCase(),
     );
   } else {
-    console.log(
-      `\x1b[1;37;44m (NVM-Shield): \x1b[41m No ".nvmrc" file found in the project and --version argument not supplied! \x1b[49m`,
+    if (
+      !Object.keys(parsedArguments).includes('--preci') &&
+      !Object.keys(parsedArguments).includes('--postci')
+    ) {
+      outputToConsole(
+        `No ".nvmrc" file found in the project and --version argument not supplied!`,
+      );
+    }
+  }
+
+  if (Object.keys(parsedArguments).includes('--preci')) {
+    getPackageLockChecksum();
+    outputToConsole(
+      `Saved SHA1 checksum of package-lock.json to .package-lock-hash`,
     );
     process.exit(0);
   }
 
-  console.log(
-    `\x1b[1;37;44m (NVM-Shield): \x1b[1;37;42m Passed! (${currentNodeVersion})${
+  if (Object.keys(parsedArguments).includes('--postci')) {
+    const validPackageLock = comparePackageLockChecksum();
+    if (validPackageLock) {
+      outputToConsole(`No changes to package-lock.json`);
+      process.exit(0);
+    } else {
+      outputErrorToConsole(
+        `Uncommitted changes to package-lock.json detected, this could be caused by committing changes from a different Node version`,
+      );
+      process.exit(1);
+    }
+  }
+
+  outputToConsole(
+    `Passed! (${currentNodeVersion})${
       parsedArguments['--compare']
         ? ` Compare Method: (${parsedArguments['--compare']})`
         : ''
-    } \x1b[49m`,
+    }`,
   );
 } catch (err) {
-  console.log(
-    `\x1b[1;37;44m (NVM-Shield): \x1b[41m ${err.message}${
-      nvmrcVersion ? " Did you remember to 'nvm use'?" : ''
-    } \x1b[49m`,
-  );
+  console.log(`\x1b[1;37;44m (NVM-Shield): \x1b[41m ${err.message} \x1b[49m`);
   process.exit(1);
 }
 
@@ -54,8 +76,6 @@ function isValidVersion(nvmrc: string, compare?: string | undefined) {
 
   const [nvmMajor, nvmMinor, nvmPatch] = nvmrc.replace('v', '').split('.');
   const [nodeMajor, nodeMinor] = currentNodeVersion.replace('v', '').split('.');
-
-  console.log({ nvmMajor, nvmMinor, nvmPatch });
 
   if (compare === 'patch' && !nvmPatch)
     throw new Error(
@@ -112,4 +132,12 @@ function transformVersion(version: string | undefined) {
     throw new Error(`Invalid --version value supplied (${version})`);
   }
   return [major, minor || undefined, patch || undefined].join('.');
+}
+
+function outputToConsole(str: string): void {
+  console.log(`\x1b[1;37;44m (NVM-Shield): \x1b[1;37;42m ${str} \x1b[49m`);
+}
+
+function outputErrorToConsole(str: string): void {
+  console.log(`\x1b[1;37;44m (NVM-Shield): \x1b[41m ${str} \x1b[49m`);
 }
