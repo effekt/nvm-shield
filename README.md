@@ -104,3 +104,13 @@ jobs:
       - run: npm test
       - run: npm run build:integration
 ```
+
+## Parameters
+
+NVM-Shield allows the following parameters to be passed into it followed by an `=` (except the CI commands):
+
+- `No Parameters`: tests .nvmrc against current Node version
+- `--version`: specify a specific version to test against (can be used with `--compare`)
+- `--compare`: accepts `major`, `minor`, or `patch` to compare against
+- `--preci`: used before `npm i` in your CI process
+- `--postci`: used after `npm i` in your CI process
