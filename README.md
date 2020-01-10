@@ -11,7 +11,7 @@ There are two places you can use the application at the moment:
 
 ## Examples
 
-#### Verify against your .nvmrc
+### Verify against your .nvmrc
 
 Use the "nvm-shield" package as a pre-start script with no arguments. This will
 test your .nvmrc against the current Node version.
@@ -26,7 +26,7 @@ Example **package.json**
 }
 ```
 
-#### Verify against a specific version
+### Verify against a specific version
 
 Supply a specific version to test your current Node version against.
 
@@ -40,7 +40,7 @@ Example **package.json**
 }
 ```
 
-#### Verify against a specific **major** version
+### Verify against a specific **major** version
 
 Specify a major release to compare your version of Node against. In the example,
 we're looking for a major version of 12, which will match 12.13.1, 12.x.x
@@ -55,7 +55,7 @@ Example **package.json**
 }
 ```
 
-#### Verify against a specific **minor** version
+### Verify against a specific **minor** version
 
 Specify a minor release to compare your version of Node against. In the example,
 we're looking for a major version of 12.13, which will match 12.13.1, 12.13.x
@@ -70,7 +70,7 @@ Example **package.json**
 }
 ```
 
-#### Use it in your CI process!
+### Use it in your CI process!
 
 Using the `--preci` and `--postci` flags, you can check for changes in the
 package-lock during your CI process. If changes are detected the process is
