@@ -1,6 +1,6 @@
 {
   "name": "nvm-shield",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Shield your application from incorrect Node.js versions by verifying against a .nvmrc or by comparing package-locks in your CI process.",
   "main": "index.js",
   "scripts": {
@@ -32,5 +32,10 @@
     "eslint": "^6.8.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/effekt/nvm-shield.git"
+  },
+  "homepage": "https://github.com/effekt/nvm-shield"
 }
