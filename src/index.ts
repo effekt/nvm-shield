@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { parseArguments } from './utils/arguments';
-import { comparePackageLockChecksum, getPackageLockChecksum } from './utils/ci';
+import { checkForPackageLockChange } from './utils/ci';
 import { getNvmrc } from './utils/nvmrc';
 
 const currentNodeVersion = process.version;
@@ -22,26 +22,15 @@ try {
       parsedArguments['--compare']?.trim().toLowerCase(),
     );
   } else {
-    if (
-      !Object.keys(parsedArguments).includes('--preci') &&
-      !Object.keys(parsedArguments).includes('--postci')
-    ) {
+    if (!Object.keys(parsedArguments).includes('--ci')) {
       outputToConsole(
         `No ".nvmrc" file found in the project and --version argument not supplied!`,
       );
     }
   }
 
-  if (Object.keys(parsedArguments).includes('--preci')) {
-    getPackageLockChecksum();
-    outputToConsole(
-      `Saved SHA1 checksum of package-lock.json to .package-lock-hash`,
-    );
-    process.exit(0);
-  }
-
-  if (Object.keys(parsedArguments).includes('--postci')) {
-    const validPackageLock = comparePackageLockChecksum();
+  if (Object.keys(parsedArguments).includes('--ci')) {
+    const validPackageLock = checkForPackageLockChange();
     if (validPackageLock) {
       outputToConsole(`No changes to package-lock.json`);
       process.exit(0);
