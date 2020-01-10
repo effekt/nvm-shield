@@ -16,7 +16,12 @@
     "shield",
     "guard",
     "react",
-    "nvmrc"
+    "ci",
+    "cd",
+    "cicd",
+    "circleci",
+    "node",
+    "version"
   ],
   "author": "Jesse Wheeler",
   "license": "ISC",
