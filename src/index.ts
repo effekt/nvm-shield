@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { parseArguments } from './utils/arguments';
-import { comparePackageLockChecksum, getPackageLockChecksum } from './utils/ci';
+import { checkForPackageLockChange } from './utils/ci';
 import { getNvmrc } from './utils/nvmrc';
 
 const currentNodeVersion = process.version;
@@ -30,7 +30,7 @@ try {
   }
 
   if (Object.keys(parsedArguments).includes('--ci')) {
-    const validPackageLock = comparePackageLockChecksum();
+    const validPackageLock = checkForPackageLockChange();
     if (validPackageLock) {
       outputToConsole(`No changes to package-lock.json`);
       process.exit(0);
