@@ -1,4 +1,4 @@
-const validArguments = ['--compare', '--version', '--preci', '--postci'];
+const validArguments = ['--compare', '--version', '--ci'];
 
 export const parseArguments = () => {
   const args = process.argv.slice(2);
