@@ -1,39 +1,11 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { spawnSync } from 'child_process';
 
-const crypto = require('crypto');
-
-function checksum(contents: string) {
-  return crypto
-    .createHash('sha1')
-    .update(contents, 'utf8')
-    .digest('hex');
-}
-
-export const getPackageLockChecksum = () => {
+export const checkForPackageLockChange = (): boolean => {
   try {
-    writeFileSync(
-      join(process.cwd(), '.package-lock-hash'),
-      checksum(
-        readFileSync(join(process.cwd(), 'package-lock.json'), 'utf-8').trim(),
-      ),
-    );
-  } catch (err) {
-    return;
-  }
-};
+    const sp = spawnSync('git', ['status'], { encoding: 'utf-8' });
+    const pattern = /modified:.*package-lock.json/;
 
-export const comparePackageLockChecksum = (): boolean => {
-  try {
-    const oldPackageLock = readFileSync(
-      join(process.cwd(), '.package-lock-hash'),
-      'utf-8',
-    ).trim();
-    const newPackageLock = checksum(
-      readFileSync(join(process.cwd(), 'package-lock.json'), 'utf-8').trim(),
-    );
-
-    return oldPackageLock === newPackageLock;
+    return pattern.test(sp.stdout);
   } catch (err) {
     return false;
   }
