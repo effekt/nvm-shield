@@ -1,6 +1,6 @@
 {
   "name": "nvm-shield",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Shield your application from incorrect Node.js versions by verifying against a .nvmrc or by comparing package-locks in your CI process.",
   "main": "index.js",
   "scripts": {
