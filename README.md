@@ -72,9 +72,9 @@ Example **package.json**
 
 ### Use it in your CI process!
 
-Using the `--preci` and `--postci` flags, you can check for changes in the
-package-lock during your CI process. If changes are detected the process is
-terminated and the build fails.
+Using the `--ci` flag you can check for changes in the package-lock during your
+CI process. If changes are detected the process is terminated and the build
+fails.
 
 An integration with CircleCI might look like the following:
 
@@ -82,9 +82,8 @@ Example **package.json**
 
 ```
 "scripts": {
-    "nvm-shield-preci": "nvm-shield --preci",
-    "nvm-shield-postci": "nvm-shield --postci",
-    ...
+  "nvm-shield-ci": "nvm-shield --ci",
+  ...
 }
 ```
 
@@ -97,12 +96,37 @@ jobs:
       - image: circleci/node:12.13.1-browsers
     steps:
       - checkout
-      - run: npm run nvm-shield-preci
-      - run: npm ci
-      - run: npm run nvm-shield-postci
+      - run: npm i
+      - run: npm run nvm-shield-ci
       - run: npm run lint
       - run: npm test
       - run: npm run build:integration
+```
+
+### Use it as a Husky pre-commit hook!
+
+Using [Husky](https://github.com/typicode/husky) you can prevent incorrect
+versions of packages being installed before they even hit the CI/CD process and
+before they reach your projects repository.
+
+Using the same `--ci` flag as mentioned in the CircleCI sample integration you
+can use NVM-Shield as a pre-commit hook.
+
+An integration with Husky might look like the following:
+
+Example **package.json**
+
+```
+"scripts": {
+  "nvm-shield": "nvm-shield",
+  "nvm-shield-ci": "nvm-shield --ci",
+  ...
+},
+"husky": {
+  "hooks": {
+    "pre-commit": "npm run nvm-shield && npm i && npm run nvm-shield-ci"
+  }
+},
 ```
 
 ## Parameters
@@ -112,5 +136,4 @@ NVM-Shield allows the following parameters to be passed into it followed by an `
 - `No Parameters`: tests .nvmrc against current Node version
 - `--version`: specify a specific version to test against (can be used with `--compare`)
 - `--compare`: accepts `major`, `minor`, or `patch` to compare against
-- `--preci`: used before `npm i` in your CI process
-- `--postci`: used after `npm i` in your CI process
+- `--ci`: used after `npm i` in your CI process
