@@ -30,7 +30,7 @@ try {
   }
 
   if (Object.keys(parsedArguments).includes('--ci')) {
-    const validPackageLock = checkForPackageLockChange();
+    const validPackageLock = !checkForPackageLockChange();
     if (validPackageLock) {
       outputToConsole(`No changes to package-lock.json`);
       process.exit(0);
