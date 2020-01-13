@@ -103,14 +103,14 @@ jobs:
       - run: npm run build:integration
 ```
 
-### Use it as a Husky pre-commit hook!
+### Use it as a Husky pre-push hook!
 
 Using [Husky](https://github.com/typicode/husky) you can prevent incorrect
 versions of packages being installed before they even hit the CI/CD process and
 before they reach your projects repository.
 
 Using the same `--ci` flag as mentioned in the CircleCI sample integration you
-can use NVM-Shield as a pre-commit hook.
+can use NVM-Shield as a pre-push hook.
 
 An integration with Husky might look like the following:
 
@@ -124,7 +124,24 @@ Example **package.json**
 },
 "husky": {
   "hooks": {
-    "pre-commit": "npm run nvm-shield && npm i && npm run nvm-shield-ci"
+    "pre-push": "npm run nvm-shield && npm i && npm run nvm-shield-ci"
+  }
+},
+```
+
+This could also be extended to be used as a pre-commit hook as well to ensure
+proper versions are being used when committing:
+
+Example **package.json**
+
+```
+"scripts": {
+  "nvm-shield": "nvm-shield",
+  ...
+},
+"husky": {
+  "hooks": {
+    "pre-commit": "npm run nvm-shield"
   }
 },
 ```
