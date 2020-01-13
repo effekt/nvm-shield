@@ -129,6 +129,23 @@ Example **package.json**
 },
 ```
 
+This could also be extended to be used as a pre-commit hook as well to ensure
+proper versions are being used when committing:
+
+Example **package.json**
+
+```
+"scripts": {
+  "nvm-shield": "nvm-shield",
+  ...
+},
+"husky": {
+  "hooks": {
+    "pre-commit": "npm run nvm-shield"
+  }
+},
+```
+
 ## Parameters
 
 NVM-Shield allows the following parameters to be passed into it followed by an `=` (except the CI commands):
