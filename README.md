@@ -154,3 +154,5 @@ NVM-Shield allows the following parameters to be passed into it followed by an `
 - `--version`: specify a specific version to test against (can be used with `--compare`)
 - `--compare`: accepts `major`, `minor`, or `patch` to compare against
 - `--ci`: used after `npm i` in your CI process
+
+Licensed under MIT [TL;DR Legal](https://tldrlegal.com/license/mit-license)
